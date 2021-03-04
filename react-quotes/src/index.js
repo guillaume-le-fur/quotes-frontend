@@ -1,17 +1,132 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+class QuoteRow extends React.Component {
+    render() {
+        const quote = this.props.quote;
+
+        return (
+            <tr>
+                <td>{quote.text}</td>
+                <td>{quote.author}</td>
+                <td>{quote.book}</td>
+                <td>{quote.tags}</td>
+            </tr>
+        );
+    }
+}
+
+class QuoteTable extends React.Component {
+    render() {
+        const filterText = this.props.filterText;
+        const rows = [];
+
+        this.props.quotes.forEach((quote) => {
+            if (quote.text.indexOf(filterText) === -1) {
+                return;
+            }
+            rows.push(
+                <QuoteRow
+                    quote={quote}
+                    key={quote.author} />
+            );
+        });
+        return (
+            <table>
+                <thead>
+                    <tr>
+                        <th>Text</th>
+                        <th>Author</th>
+                        <th>Book</th>
+                        <th>Tags</th>
+                    </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </table>
+        );
+    }
+}
+
+class SearchBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    }
+
+    handleFilterTextChange(e) {
+        this.props.onFilterTextChange(e.target.value);
+    }
+
+    render() {
+        return (
+            <form>
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    value={this.props.filterText}
+                    onChange={this.handleFilterTextChange}
+                />
+            </form>
+        );
+    }
+}
+
+class FilterableQuoteTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            filterText: ''
+        };
+
+        this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    }
+
+    handleFilterTextChange(filterText) {
+        this.setState({
+            filterText: filterText
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <SearchBar
+                    filterText={this.state.filterText}
+                    onFilterTextChange={this.handleFilterTextChange}
+                />
+                <QuoteTable
+                    quotes={this.props.quotes}
+                    filterText={this.state.filterText}
+                />
+            </div>
+        );
+    }
+}
+
+const QUOTES = [
+    {
+        "id": 1,
+        "text": "Alea iacta est",
+        "author": "Julius Caesar",
+        "book": "De vita Caesarum",
+        "tags": [
+            "war",
+            "peace"
+        ]
+    },
+    {
+        "id": 2,
+        "text": "All we have to decide is what to do with the time that is given us",
+        "author": "J.R.R. Tolkein",
+        "book": "The Fellowship of the Ring",
+        "tags": [
+            "fantasy"
+        ]
+    }
+];
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <FilterableQuoteTable quotes={QUOTES} />,
+    document.getElementById('container')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
