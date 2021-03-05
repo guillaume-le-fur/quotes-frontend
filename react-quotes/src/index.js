@@ -112,6 +112,7 @@ class FilterableQuoteTable extends React.Component {
     render() {
         return (
             <div>
+                <img src={process.env.PUBLIC_URL + "squirrel_enhanced_auto_x2_colored_toned.png"} width={"100px"} alt={"photo"}/>
                 <SearchBar
                     filterText={this.state.filterText}
                     onFilterTextChange={this.handleFilterTextChange}
