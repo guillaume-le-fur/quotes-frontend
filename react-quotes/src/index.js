@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class QuoteRow extends React.Component {
+/*class QuoteRow extends React.Component {
     render() {
         const quote = this.props.quote;
 
@@ -15,22 +15,43 @@ class QuoteRow extends React.Component {
             </tr>
         );
     }
+}*/
+
+function QuoteRow(props) {
+    return (
+        <tr>
+            <td>{props.quote.text}</td>
+            <td>{props.quote.author}</td>
+            <td>{props.quote.book}</td>
+            <td>{props.quote.tags}</td>
+        </tr>
+    );
 }
 
 class QuoteTable extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            rows: []
+        }
+    }
+
     render() {
         const filterText = this.props.filterText;
-        const rows = [];
-
-        this.props.quotes.forEach((quote) => {
-            if (quote.text.indexOf(filterText) === -1) {
-                return;
-            }
-            rows.push(
-                <QuoteRow
-                    quote={quote}
-                    key={quote.author} />
-            );
+        // const rows = [];
+        fetch('/quotes').then(res => res.json()).then(data => {
+            this.state.rows = [];
+            data.quotes.forEach((quote) => {
+                if (quote.text.indexOf(filterText) === -1) {
+                    return;
+                }
+                this.state.rows.push(
+                    <QuoteRow
+                        quote={quote}
+                        key={quote.author} />
+                );
+            });
         });
         return (
             <table>
@@ -42,7 +63,7 @@ class QuoteTable extends React.Component {
                         <th>Tags</th>
                     </tr>
                 </thead>
-                <tbody>{rows}</tbody>
+                <tbody>{this.state.rows}</tbody>
             </table>
         );
     }
@@ -95,38 +116,13 @@ class FilterableQuoteTable extends React.Component {
                     filterText={this.state.filterText}
                     onFilterTextChange={this.handleFilterTextChange}
                 />
-                <QuoteTable
-                    quotes={this.props.quotes}
-                    filterText={this.state.filterText}
-                />
+                <QuoteTable filterText={this.state.filterText} />
             </div>
         );
     }
 }
 
-const QUOTES = [
-    {
-        "id": 1,
-        "text": "Alea iacta est",
-        "author": "Julius Caesar",
-        "book": "De vita Caesarum",
-        "tags": [
-            "war",
-            "peace"
-        ]
-    },
-    {
-        "id": 2,
-        "text": "All we have to decide is what to do with the time that is given us",
-        "author": "J.R.R. Tolkein",
-        "book": "The Fellowship of the Ring",
-        "tags": [
-            "fantasy"
-        ]
-    }
-];
-
 ReactDOM.render(
-    <FilterableQuoteTable quotes={QUOTES} />,
+    <FilterableQuoteTable/>,
     document.getElementById('container')
 );
