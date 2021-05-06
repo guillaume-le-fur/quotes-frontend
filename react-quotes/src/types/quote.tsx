@@ -3,7 +3,7 @@ interface Quote {
     text: string,
     author: string,
     book: string,
-    tags: string
+    tags: Array<string>
 }
 
 export default Quote;

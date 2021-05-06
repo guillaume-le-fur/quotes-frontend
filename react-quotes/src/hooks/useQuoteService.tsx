@@ -14,13 +14,12 @@ const useQuoteService = ({filterText}: QuoteServiceProps) => {
     const [rows, setRows] = useState<Service<Quote[]>>({status: 'loading'})
 
     useEffect(() => {
-        if(filterText !== undefined && filterText.length > 0){
-            setRows({status: 'loading'})
-            fetch('/quotes/'.concat(filterText))
-                .then(response => response.json())
-                .then(response => {setRows({status: 'loaded', payload: response.quotes})})
-                .catch(error => setRows({status: 'error', error: error}));
-        }
+        const queryUrl = filterText !== undefined && filterText.length > 0 ? '/quotes/'.concat(filterText) :  '/quotes'
+        setRows({status: 'loading'})
+        fetch(queryUrl)
+            .then(response => response.json())
+            .then(response => {setRows({status: 'loaded', payload: response.quotes})})
+            .catch(error => setRows({status: 'error', error: error}));
     }, [filterText])
     console.log(rows)
     return(rows)

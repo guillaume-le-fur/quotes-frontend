@@ -1,19 +1,14 @@
 import * as React from "react";
 import Quote from '../types/quote'
+import {TableCell, TableRow} from "@material-ui/core";
 
 const QuoteRow = ({text, author, book, tags}: Quote) => (
-    <tr>
-        <td>{text}</td>
-        <td>{author}</td>
-        <td>{book}</td>
-        <td>{tags}</td>
-    </tr>
+    <TableRow key={text}>
+        <TableCell component="th" scope="row">{text}</TableCell>
+        <TableCell align="right">{author}</TableCell>
+        <TableCell align="right">{book}</TableCell>
+        <TableCell align="right">{tags.join(', ')}</TableCell>
+    </TableRow>
 )
-
-/*const QuoteRow: React.FC = () => (
-  <div className={styles.QuoteRow}>
-    QuoteRow Component
-  </div>
-);*/
 
 export default QuoteRow;

@@ -3,8 +3,16 @@ import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {Subject} from "rxjs";
 import SearchBar from "./SearchBar";
 import QuoteTable from "./QuoteTable";
+import styled from "styled-components";
 
 const textChange = new Subject<string>();
+
+const ContainerDiv = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
 
 
 const FilterableQuoteTable = () => {
@@ -21,13 +29,13 @@ const FilterableQuoteTable = () => {
     }, []);
 
     return (
-        <div>
+        <ContainerDiv>
             <SearchBar
                 filterText={filterText}
                 onChange={filterText => {setFilterText(filterText); textChange.next(filterText)}}
             />
             <QuoteTable filterText={filterText}/>
-        </div>
+        </ContainerDiv>
     )
 }
 
