@@ -1,59 +1,83 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import {Button} from "@material-ui/core";
+import {
+    AppBar,
+    Fab,
+    makeStyles,
+    Toolbar,
+} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add"
+import SearchIcon from '@material-ui/icons/Search';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import HomeIcon from '@material-ui/icons/Home';
+import FooterElement from "./FooterElement";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
-const HeaderDiv = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #8fcbff;
-  flex-wrap: wrap;
-`
+const headersLinks = [
+    {
+        label: "Home",
+        href: "/",
+    },
+    {
+        label: "About",
+        href: "/edit",
+    },
+];
 
-const Logo = styled.img`
-    padding: .5rem .5rem;
-    height : 50px;
-`
+const useStyles = makeStyles((theme) => ({
+    text: {
+        padding: theme.spacing(2, 2, 0),
+    },
+    paper: {
+        paddingBottom: 50,
+    },
+    list: {
+        marginBottom: theme.spacing(2),
+    },
+    subheader: {
+        backgroundColor: theme.palette.background.paper,
+    },
+    appBar: {
+        top: 'auto',
+        bottom: 0,
+        backgroundColor: '#abcfff'
+    },
+    grow: {
+        flexGrow: 1,
+    },
+    fabButton: {
+        position: 'absolute',
+        zIndex: 1,
+        top: -30,
+        left: 0,
+        right: 0,
+        margin: '0 auto',
+        backgroundColor: "#2b86ff"
+    },
+    spacedIcons: {
+        display: 'flex',
+        justifyContent: 'space-between',
 
-const LinkWrapper = styled.div`
-    padding: 1rem;
-    float: left;
-`
+    }
+}));
 
-const LogoContainer = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items : center
-`
+const Header = () => {
+    const styles = useStyles();
+    const width = useWindowDimensions().width;
 
-interface HeaderLinkInterface {
-    link: string;
-    text: string;
+    return (
+        <AppBar position="fixed" color="primary" className={styles.appBar}>
+            <Toolbar className={styles.spacedIcons}>
+                <FooterElement icon={<HomeIcon />} label={'Home'} href={'/'}/>
+                <FooterElement icon={<MoreIcon />} label={'My quotes'} href={'/'}/>
+                <FooterElement icon={<SearchIcon />} label={'About'} href={'edit'}/>
+                <FooterElement icon={<HomeIcon />} label={'Home'} href={'/'}/>
+                <Fab size={width < 500 ? "small" : "medium"} color="secondary" aria-label="add" className={styles.fabButton}>
+                    <AddIcon />
+                </Fab>
+            </Toolbar>
+        </AppBar>
+    )
+
 }
-
-const HeaderLink = ({link, text}: HeaderLinkInterface) => (
-    <LinkWrapper>
-        <Button color="primary">
-            <Link style={{textDecoration: 'none', color: 'white'}} to={link}>{text}</Link>
-        </Button>
-    </LinkWrapper>
-)
-
-const Header = () => (
-    <HeaderDiv>
-        <LogoContainer>
-            <Logo src={process.env.PUBLIC_URL + '/logo_squirrel.png'} alt={"Company"}/>
-            <h2>Quotes</h2>
-        </LogoContainer>
-        <nav>
-            <HeaderLink link="/" text="Home" />
-            <HeaderLink link="/edit" text="About" />
-        </nav>
-    </HeaderDiv>
-
-
-)
 
 export default Header;
 

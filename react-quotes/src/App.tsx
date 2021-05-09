@@ -10,21 +10,25 @@ import {
 import Header from "./components/Header";
 import Edit from "./components/Edit";
 import Home from "./components/Home";
+import QuoteDetails from "./components/QuoteDetails";
 
 function App() {
   return (
     <Router>
       <div>
-        <Header />
         <Switch>
           <Route exact path='/'>
             <Home />
           </Route>
-          <Route path='/edit'>
+          <Route exact path='/edit/:id'>
             <Edit />
+          </Route>
+          <Route path='/quote/:id'>
+            <QuoteDetails />
           </Route>
         </Switch>
       </div>
+      <Header />
     </Router>
   );
 }

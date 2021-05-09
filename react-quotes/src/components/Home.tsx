@@ -13,6 +13,7 @@ const Home = () => (
     <TitleDiv>
         <h1>Welcome to Quotes !</h1>
         <FilterableQuoteTable />
+
     </TitleDiv>
 )
 

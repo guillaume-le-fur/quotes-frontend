@@ -1,36 +1,28 @@
 import React from 'react';
 import useQuoteService from "../hooks/useQuoteService";
-import QuoteRow from "./QuoteRow";
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {Grid} from "@material-ui/core";
+import QuoteInfoBox from "./QuoteInfoBox";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 export interface QuoteTableProps {
     filterText: string
 }
 
 const QuoteTable = ({filterText}: QuoteTableProps) => {
-    const service = useQuoteService({filterText});
+    const service = useQuoteService(filterText);
+    const width = useWindowDimensions().width;
 
     return (
-        <div style={{width: "50%"}}>
+        <div style={{width: '100%'}}>
             {service.status === 'loading' && <div>Loading...</div>}
             {service.status === 'loaded' &&
-                <TableContainer component={Paper}>
-                    <Table aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Text</TableCell>
-                                <TableCell align="right">Author</TableCell>
-                                <TableCell align="right">Book</TableCell>
-                                <TableCell align="right">Tags</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {service.payload !== undefined && service.payload.map(quote => (
-                                <QuoteRow key={quote.id} text={quote.text} author={quote.author} book={quote.book} tags={quote.tags}/>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                <Grid container spacing={2}>
+                    {service.payload.map(quote =>(
+                        <Grid key={quote.text} item xs={width < 500 ? 12 : 4}>
+                            <QuoteInfoBox id={quote.id} text={quote.text} author={quote.author} book={quote.book} tags={quote.tags}/>
+                        </Grid>
+                    ))}
+                </Grid>
             }
               {service.status === 'error' && (
                 <div>Error, the backend moved to the dark side.</div>

@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import {Grid, TextField} from "@material-ui/core";
+import SearchIcon from '@material-ui/icons/Search';
 
 export interface searchBarProps {
     onChange: (text: string) => void;
@@ -7,17 +9,24 @@ export interface searchBarProps {
 }
 
 const SearchForm = styled.form`
-    padding: 1.5rem;
+    padding: 1rem;
 `
 
-const SearchBar = ({onChange, filterText}: searchBarProps) => (
+const SearchBar = ({filterText, onChange}: searchBarProps) => (
     <SearchForm>
-        <input
-            type="text"
-            placeholder="Search..."
-            value={filterText}
-            onChange={event => onChange(event.target.value)}
-        />
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item>
+            <SearchIcon />
+          </Grid>
+          <Grid item>
+            <TextField
+                id="quote-search-field"
+                label="Search a quote"
+                type="search"
+                value={filterText}
+                onChange={event => onChange(event.target.value)}/>
+          </Grid>
+        </Grid>
     </SearchForm>
 );
 
