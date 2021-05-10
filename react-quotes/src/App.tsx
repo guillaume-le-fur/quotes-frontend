@@ -11,6 +11,8 @@ import Header from "./components/Header";
 import Edit from "./components/Edit";
 import Home from "./components/Home";
 import QuoteDetails from "./components/QuoteDetails";
+import About from './components/About';
+import AddQuote from "./components/AddQuote";
 
 function App() {
   return (
@@ -20,7 +22,13 @@ function App() {
           <Route exact path='/'>
             <Home />
           </Route>
-          <Route exact path='/edit/:id'>
+          <Route exact path='/add'>
+            <AddQuote/>
+          </Route>
+          <Route exact path='/about'>
+            <About />
+          </Route>
+          <Route path='/edit/:id'>
             <Edit />
           </Route>
           <Route path='/quote/:id'>

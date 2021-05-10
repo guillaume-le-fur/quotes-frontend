@@ -10,16 +10,29 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import HomeIcon from '@material-ui/icons/Home';
 import FooterElement from "./FooterElement";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import {Link} from "react-router-dom";
 
 const headersLinks = [
     {
         label: "Home",
         href: "/",
+        icon: <HomeIcon/>
+    },
+    {
+        label: "My quotes (redirects home)",
+        href: "/",
+        icon: <MoreIcon/>
     },
     {
         label: "About",
-        href: "/edit",
+        href: "/about",
+        icon: <SearchIcon/>
     },
+    {
+        label: "Other (redirects home)",
+        href: "/",
+        icon: <HomeIcon/>
+    }
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -66,11 +79,10 @@ const Header = () => {
     return (
         <AppBar position="fixed" color="primary" className={styles.appBar}>
             <Toolbar className={styles.spacedIcons}>
-                <FooterElement icon={<HomeIcon />} label={'Home'} href={'/'}/>
-                <FooterElement icon={<MoreIcon />} label={'My quotes'} href={'/'}/>
-                <FooterElement icon={<SearchIcon />} label={'About'} href={'edit'}/>
-                <FooterElement icon={<HomeIcon />} label={'Home'} href={'/'}/>
-                <Fab size={width < 500 ? "small" : "medium"} color="secondary" aria-label="add" className={styles.fabButton}>
+                {headersLinks.map(element => (
+                    <FooterElement key={element.label} icon={element.icon} label={element.label} href={element.href}/>
+                ))}
+                <Fab size={width < 500 ? "small" : "medium"} component={Link} to={'/add'} color="secondary" aria-label="add" className={styles.fabButton}>
                     <AddIcon />
                 </Fab>
             </Toolbar>

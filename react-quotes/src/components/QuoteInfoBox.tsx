@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 const QuoteInfoBox = (quote: Quote) => {
     const classes = useStyles();
+
+    const copyText = () => navigator.clipboard.writeText(quote.text)
+    const copyCitationInfo = () => navigator.clipboard.writeText([quote.author, quote.book].join(", "));
     return (
         <Card>
             <CardContent>
@@ -59,8 +62,18 @@ const QuoteInfoBox = (quote: Quote) => {
                         size="small"
                         className={classes.actionButton}
                         startIcon={<TextFieldsOutlinedIcon />}
+                        onClick={copyText}
                       >
                         Copy text
+                    </Button>
+                    <Button
+                        color="primary"
+                        size="small"
+                        className={classes.actionButton}
+                        startIcon={<FileCopyOutlinedIcon />}
+                        onClick={copyCitationInfo}
+                      >
+                        Get citation
                     </Button>
                     <Button
                         color="primary"
@@ -70,14 +83,6 @@ const QuoteInfoBox = (quote: Quote) => {
                             '/edit/'.concat(quote.id.toString()) :
                             '/'
                         }
-                        className={classes.actionButton}
-                        startIcon={<FileCopyOutlinedIcon />}
-                      >
-                        Get citation
-                    </Button>
-                    <Button
-                        color="primary"
-                        size="small"
                         className={classes.actionButton}
                         startIcon={<EditOutlinedIcon />}
                       >

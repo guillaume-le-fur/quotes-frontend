@@ -13,7 +13,6 @@ const useQuoteDetailService = (id: string) => {
             .then(response => setQuote({status: 'loaded', payload: response}))
             .catch(error => setQuote({status: 'error', error: error}))
     }, [id])
-    console.log(quote);
     return(quote);
 }
 

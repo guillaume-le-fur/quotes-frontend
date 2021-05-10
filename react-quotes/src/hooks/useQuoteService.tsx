@@ -17,7 +17,6 @@ const useQuoteService = (filterText: string) => {
             .then(response => setRows({status: 'loaded', payload: response.quotes}))
             .catch(error => setRows({status: 'error', error: error}));
     }, [filterText])
-    console.log(rows);
     return(rows);
 };
 
