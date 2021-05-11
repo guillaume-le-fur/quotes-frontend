@@ -14,6 +14,7 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import MuiAlert from "@material-ui/lab/Alert";
 import SaveIcon from "@material-ui/icons/Save";
+import { RouteComponentProps, withRouter } from 'react-router';
 
 const useStyles = makeStyles(() => ({
     form: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-const AddQuote = () => {
+const AddQuote = ({history}: RouteComponentProps) => {
     const width = useWindowDimensions().width;
     const styles = useStyles();
 
@@ -76,9 +77,9 @@ const AddQuote = () => {
             .then(response => {
                 // TODO Handle error
                 if(response.ok) {
-                    return response.json()
+                    history.push('/');
                 }else{
-                    console.log("failed")
+                    console.log("failed");
                 }
             });
     }
@@ -176,4 +177,4 @@ const AddQuote = () => {
 }
 
 
-export default AddQuote;
+export default withRouter(AddQuote);

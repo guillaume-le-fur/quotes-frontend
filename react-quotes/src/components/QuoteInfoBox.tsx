@@ -1,10 +1,26 @@
-import React from "react";
-import {Box, Button, Card, CardActions, CardContent, Chip, makeStyles, Typography} from "@material-ui/core";
+import React, {useState} from "react";
+import {
+    Box,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    Chip,
+    Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle,
+    makeStyles,
+    Typography
+} from "@material-ui/core";
 import Quote from "../types/quote";
 import TextFieldsOutlinedIcon from '@material-ui/icons/TextFieldsOutlined';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import {Link} from "react-router-dom";
+import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
+import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
+import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
+
+import {SpeedDial, SpeedDialAction, SpeedDialIcon} from "@material-ui/lab";
+import { RouteComponentProps, withRouter } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -29,18 +45,52 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 12,
     },
     chips: {
-        marginRight: 4
+        marginRight: 4,
+        marginTop: 10
+    },
+    chipsPlaceholder :{
+        marginRight: 4,
+        marginTop: 10,
+        padding: "12px 0"
     },
     actionButton: {
         margin: theme.spacing(1),
     }
 }));
 
-const QuoteInfoBox = (quote: Quote) => {
+interface QuoteInfoBoxProps {
+    quote: Quote,
+    onQuoteDelete: Function
+}
+
+const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & RouteComponentProps) => {
     const classes = useStyles();
+
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [speedDialOpen, setSpeedDialOpen] = useState(false);
 
     const copyText = () => navigator.clipboard.writeText(quote.text)
     const copyCitationInfo = () => navigator.clipboard.writeText([quote.author, quote.book].join(", "));
+
+    const handleCloseDeleteDialog = () => setDeleteDialogOpen(false);
+    const handleOpenDeleteDialog = () => setDeleteDialogOpen(true);
+
+    const handleSpeedDialOpen = () => setSpeedDialOpen(true);
+    const handleSpeedDialClose = () => setSpeedDialOpen(false);
+
+    const goToEdit = () => {
+        if(quote.id !== undefined) {
+            history.push('/edit/'.concat(quote.id.toString()))
+        }
+    }
+
+    const speedDialElements = [
+        { icon: <TextFieldsOutlinedIcon />, name: 'Copy text', onClick: copyText},
+        { icon: <FileCopyOutlinedIcon />, name: 'Copy citing info', onClick: copyCitationInfo},
+        { icon: <EditOutlinedIcon />, name: 'Edit', onClick: goToEdit},
+        { icon: <DeleteOutlined />, name: 'Delete', onClick: handleOpenDeleteDialog},
+    ]
+
     return (
         <Card>
             <CardContent>
@@ -53,46 +103,56 @@ const QuoteInfoBox = (quote: Quote) => {
                 <Typography className={classes.pos} variant="body2" component="p">
                     {quote.book}
                 </Typography>
-                 {quote.tags.map(tag => <Chip key={tag} label={tag} className={classes.chips} size="small"/>)}
+                {quote.tags.length > 0 ? quote.tags.map(tag => <Chip key={tag} label={tag} className={classes.chips} size="small"/>) :
+                    <div className={classes.chipsPlaceholder}/>
+                }
             </CardContent>
             <CardActions>
                 <div className={classes.header}>
-                    <Button
-                        color="primary"
-                        size="small"
-                        className={classes.actionButton}
-                        startIcon={<TextFieldsOutlinedIcon />}
-                        onClick={copyText}
-                      >
-                        Copy text
-                    </Button>
-                    <Button
-                        color="primary"
-                        size="small"
-                        className={classes.actionButton}
-                        startIcon={<FileCopyOutlinedIcon />}
-                        onClick={copyCitationInfo}
-                      >
-                        Get citation
-                    </Button>
-                    <Button
-                        color="primary"
-                        size="small"
-                        component={Link}
-                        to={quote.id !== undefined ?
-                            '/edit/'.concat(quote.id.toString()) :
-                            '/'
-                        }
-                        className={classes.actionButton}
-                        startIcon={<EditOutlinedIcon />}
-                      >
-                        Edit
-                    </Button>
+                    <SpeedDial
+                        ariaLabel={"actions"}
+                        open={speedDialOpen}
+                        onOpen={handleSpeedDialOpen}
+                        icon={<SpeedDialIcon openIcon={<MoreHorizOutlinedIcon />} icon={<MoreVertOutlinedIcon/>}/>}
+                        onClose={handleSpeedDialClose}
+                        direction="right"
+                        FabProps={{size: "small"}}
+                    >
+                        {speedDialElements.map(element => (
+                            <SpeedDialAction
+                                key={element.name}
+                                icon={element.icon}
+                                onClick={element.onClick}
+                                tooltipTitle={element.name}
+                            />
+                        ))}
+                    </SpeedDial>
                 </div>
             </CardActions>
+            <Dialog
+                open={deleteDialogOpen}
+                onClose={handleCloseDeleteDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Confirm quote deletion?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      This will permanently delete the quote from the database.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDeleteDialog} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={() => {onQuoteDelete(quote); handleCloseDeleteDialog()}} color="primary" autoFocus>
+                      Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Card>
     )
 }
 
 
-export default QuoteInfoBox;
+export default withRouter(QuoteInfoBox);

@@ -11,6 +11,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import FooterElement from "./FooterElement";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import {Link} from "react-router-dom";
+import {MOBILE_WIDTH} from "../constants";
 
 const headersLinks = [
     {
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         top: 'auto',
         bottom: 0,
-        backgroundColor: '#abcfff'
+        backgroundColor: '#abcfff',
     },
     grow: {
         flexGrow: 1,
@@ -59,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
     fabButton: {
         position: 'absolute',
         zIndex: 1,
-        top: -30,
         left: 0,
         right: 0,
         margin: '0 auto',
@@ -72,24 +72,28 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Header = () => {
+const Footer = () => {
     const styles = useStyles();
     const width = useWindowDimensions().width;
 
     return (
-        <AppBar position="fixed" color="primary" className={styles.appBar}>
-            <Toolbar className={styles.spacedIcons}>
-                {headersLinks.map(element => (
-                    <FooterElement key={element.label} icon={element.icon} label={element.label} href={element.href}/>
-                ))}
-                <Fab size={width < 500 ? "small" : "medium"} component={Link} to={'/add'} color="secondary" aria-label="add" className={styles.fabButton}>
-                    <AddIcon />
-                </Fab>
-            </Toolbar>
-        </AppBar>
+        <div>
+            <Toolbar/>
+            <Toolbar/>
+            <AppBar position="fixed" color="primary" className={styles.appBar}>
+                <Toolbar className={styles.spacedIcons}>
+                    {headersLinks.map(element => (
+                        <FooterElement key={element.label} icon={element.icon} label={element.label} href={element.href}/>
+                    ))}
+                    <Fab size={width < MOBILE_WIDTH ? "small" : "medium"} style={{top : width < MOBILE_WIDTH ? -25 : -30}} component={Link} to={'/add'} color="secondary" aria-label="add" className={styles.fabButton}>
+                        <AddIcon />
+                    </Fab>
+                </Toolbar>
+            </AppBar>
+        </div>
     )
 
 }
 
-export default Header;
+export default Footer;
 

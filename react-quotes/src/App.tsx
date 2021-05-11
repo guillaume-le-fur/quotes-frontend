@@ -7,7 +7,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Edit from "./components/Edit";
 import Home from "./components/Home";
 import QuoteDetails from "./components/QuoteDetails";
@@ -36,7 +36,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-      <Header />
+      <Footer />
     </Router>
   );
 }
