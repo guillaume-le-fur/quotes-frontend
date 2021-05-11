@@ -16,6 +16,9 @@ import MuiAlert from "@material-ui/lab/Alert"
 import useQuoteDetailService from "../hooks/useQuoteDetailSevice";
 import SaveIcon from "@material-ui/icons/Save"
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+import EditableField from "./EditableField";
+import {withRouter, RouteComponentProps} from "react-router";
+import {MOBILE_WIDTH} from "../constants";
 
 interface RouteParams {
     id: string
@@ -42,12 +45,21 @@ const useStyles = makeStyles(() => ({
         display: "flex",
         alignItems: "flex-end",
     },
+    valueInputs: {
+        flexGrow: 2
+    },
     tagItem: {
         margin: "0 3px"
+    },
+    submitButton: {
+        display: "flex",
+        justifyContent: "flex-end",
+        margin: "0 10px"
     }
 }))
 
-const Edit = () => {
+const Edit = ({history}: RouteComponentProps) => {
+
     const params = useParams<RouteParams>();
     const styles = useStyles();
     const service = useQuoteDetailService(params.id);
@@ -84,9 +96,11 @@ const Edit = () => {
                 .then(response => {
                     // TODO Handle error
                     if(response.ok) {
-                        return response.json()
+                        history.push('/');
                     }else{
-                        console.log("failed")
+                        setSnackBarText("There was an error saving the quote.");
+                        setSnackBarOpen(true);
+                        console.log("failed");
                     }
                 });
         }
@@ -133,28 +147,47 @@ const Edit = () => {
         <div>
             {service.status === 'loading' && <div>Loading...</div>}
             {service.status === 'loaded' && (
-                <Card style={{margin: width < 500 ? "5px" : "30px"}}>
+                <Card style={{margin: width < MOBILE_WIDTH ? "5px" : "30px"}}>
                     <CardContent>
                         <form className={styles.form}>
-                            <Typography variant={"body1"} className={styles.fieldTitle}>Text</Typography>
-                            <TextField
-                                multiline
-                                rowsMax={4}
-                                id="quote-edit-text"
+                            <EditableField
+                                label="Text"
                                 value={currentText}
-                                onChange={(event) => handleChange(event, setCurrentText)}
+                                editableComponent={
+                                    <TextField
+                                        multiline
+                                        className={styles.valueInputs}
+                                        rowsMax={4}
+                                        id="quote-edit-text"
+                                        value={currentText}
+                                        onChange={(event) =>
+                                            handleChange(event, setCurrentText)
+                                        }
+                                    />
+                                }
                             />
-                            <Typography variant={"body1"} className={styles.fieldTitle}>Author</Typography>
-                            <TextField
-                                id="quote-edit-author"
+                            <EditableField
+                                label="Author"
                                 value={currentAuthor}
-                                onChange={(event) => handleChange(event, setCurrentAuthor)}
+                                editableComponent={
+                                    <TextField
+                                        className={styles.valueInputs}
+                                        id="quote-edit-author"
+                                        value={currentAuthor}
+                                        onChange={(event) => handleChange(event, setCurrentAuthor)}
+                                    />
+                                }
                             />
-                            <Typography variant={"body1"} className={styles.fieldTitle}>Book</Typography>
-                            <TextField
-                                id="quote-edit-book"
+                            <EditableField
+                                label="Book"
                                 value={currentBook}
-                                onChange={(event) => handleChange(event, setCurrentBook)}
+                                editableComponent={
+                                    <TextField
+                                        id="quote-edit-book"
+                                        value={currentBook}
+                                        onChange={(event) => handleChange(event, setCurrentBook)}
+                                    />
+                                }
                             />
                             <Typography variant={"body1"} className={styles.fieldTitle}>Tags</Typography>
                             <div className={styles.tagEditor}>
@@ -182,15 +215,15 @@ const Edit = () => {
                             </div>
                         </form>
                     </CardContent>
-                    <CardActions>
-                        <Button
-                            color="primary"
-                            size="small"
-                            startIcon={<SaveIcon />}
-                            onClick={submitEdit}
-                        >
-                            Submit
-                        </Button>
+                    <CardActions className={styles.submitButton}>
+                            <Button
+                                color="primary"
+                                size="small"
+                                startIcon={<SaveIcon />}
+                                onClick={submitEdit}
+                            >
+                                Submit
+                            </Button>
                     </CardActions>
                 </Card>
 
@@ -201,4 +234,4 @@ const Edit = () => {
     )
 }
 
-export default Edit;
+export default withRouter(Edit);

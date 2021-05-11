@@ -21,6 +21,8 @@ import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 
 import {SpeedDial, SpeedDialAction, SpeedDialIcon} from "@material-ui/lab";
 import { RouteComponentProps, withRouter } from 'react-router';
+import useWindowDimensions from "../hooks/useWindowDimensions";
+import {MOBILE_WIDTH} from "../constants";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -66,6 +68,8 @@ interface QuoteInfoBoxProps {
 const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & RouteComponentProps) => {
     const classes = useStyles();
 
+    const width = useWindowDimensions().width;
+
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [speedDialOpen, setSpeedDialOpen] = useState(false);
 
@@ -92,7 +96,7 @@ const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & Route
     ]
 
     return (
-        <Card>
+        <Card style={{margin: width < MOBILE_WIDTH ? "0 5px" : "0"}}>
             <CardContent>
                 <Box className={classes.title} fontStyle="italic" color="textSecondary">
                     {quote.text}

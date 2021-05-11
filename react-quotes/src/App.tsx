@@ -19,21 +19,11 @@ function App() {
     <Router>
       <div>
         <Switch>
-          <Route exact path='/'>
-            <Home />
-          </Route>
-          <Route exact path='/add'>
-            <AddQuote/>
-          </Route>
-          <Route exact path='/about'>
-            <About />
-          </Route>
-          <Route path='/edit/:id'>
-            <Edit />
-          </Route>
-          <Route path='/quote/:id'>
-            <QuoteDetails />
-          </Route>
+          <Route exact path='/' component={Home}/>
+          <Route exact path='/add' component={AddQuote}/>
+          <Route exact path='/about' component={About}/>
+          <Route path='/edit/:id' component={Edit}/>
+          <Route path='/quote/:id' component={QuoteDetails}/>
         </Switch>
       </div>
       <Footer />

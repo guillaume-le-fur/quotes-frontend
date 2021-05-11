@@ -4,6 +4,7 @@ import {Grid} from "@material-ui/core";
 import QuoteInfoBox from "./QuoteInfoBox";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import Quote from "../types/quote";
+import {MOBILE_WIDTH} from "../constants";
 
 export interface QuoteTableProps {
     filterText: string
@@ -52,7 +53,7 @@ const QuoteTable = ({filterText}: QuoteTableProps) => {
                 <div>
                     <Grid container spacing={2}>
                         {quotes.map(quote =>(
-                            <Grid key={quote.text} item xs={width < 500 ? 12 : 4}>
+                            <Grid key={quote.text} item xs={width < MOBILE_WIDTH ? 12 : 4}>
                                 <QuoteInfoBox quote={quote} onQuoteDelete={handleDeleteQuote}/>
                             </Grid>
                         ))}

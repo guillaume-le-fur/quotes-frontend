@@ -15,6 +15,7 @@ import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import MuiAlert from "@material-ui/lab/Alert";
 import SaveIcon from "@material-ui/icons/Save";
 import { RouteComponentProps, withRouter } from 'react-router';
+import {MOBILE_WIDTH} from "../constants";
 
 const useStyles = makeStyles(() => ({
     form: {
@@ -113,7 +114,7 @@ const AddQuote = ({history}: RouteComponentProps) => {
     }
 
     return (
-        <Card style={{margin: width < 500 ? "5px" : "30px"}}>
+        <Card style={{margin: width < MOBILE_WIDTH ? "5px" : "30px"}}>
             <CardContent>
                 <form className={styles.form}>
                     <Typography variant={"body1"} className={styles.fieldTitle}>Text</Typography>
