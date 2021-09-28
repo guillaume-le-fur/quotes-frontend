@@ -2,23 +2,24 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import {useParams} from "react-router-dom";
 import {
+    Alert,
     Button,
     Card,
     CardActions,
     CardContent,
     Chip,
     IconButton,
-    makeStyles,
     Snackbar,
-    TextField, Typography
-} from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert"
+    TextField,
+    Typography,
+} from "@mui/material";
 import useQuoteDetailService from "../hooks/useQuoteDetailSevice";
-import SaveIcon from "@material-ui/icons/Save"
-import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined"
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import EditableField from "./EditableField";
 import {withRouter, RouteComponentProps} from "react-router";
 import {MOBILE_WIDTH} from "../constants";
+import {makeStyles} from "@mui/styles";
 
 interface RouteParams {
     id: string
@@ -157,7 +158,7 @@ const Edit = ({history}: RouteComponentProps) => {
                                     <TextField
                                         multiline
                                         className={styles.valueInputs}
-                                        rowsMax={4}
+                                        maxRows={4}
                                         id="quote-edit-text"
                                         value={currentText}
                                         onChange={(event) =>
@@ -204,13 +205,13 @@ const Edit = ({history}: RouteComponentProps) => {
                                         onChange={e => setCurrentNewTag(e.target.value)}
                                     />
                                     <IconButton aria-label="add" size="small" onClick={handleAddIcon}>
-                                        <AddCircleRoundedIcon fontSize="default"/>
+                                        <AddCircleRoundedIcon fontSize="small"/>
                                     </IconButton>
                                 </div>
                                 <Snackbar open={snackBarOpen} autoHideDuration={3000} onClose={handleCloseSnackBar}>
-                                    <MuiAlert elevation={6} variant="filled" severity={"error"} onClose={handleCloseSnackBar}>
+                                    <Alert elevation={6} variant="filled" severity={"error"} onClose={handleCloseSnackBar}>
                                         {snackBarText}
-                                    </MuiAlert>
+                                    </Alert>
                                 </Snackbar>
                             </div>
                         </form>
@@ -219,7 +220,7 @@ const Edit = ({history}: RouteComponentProps) => {
                             <Button
                                 color="primary"
                                 size="small"
-                                startIcon={<SaveIcon />}
+                                startIcon={<SaveOutlinedIcon />}
                                 onClick={submitEdit}
                             >
                                 Submit

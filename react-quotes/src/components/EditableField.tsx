@@ -1,7 +1,8 @@
 import React, {useState} from "react";
-import {Box, IconButton, makeStyles, Typography} from "@material-ui/core";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import {CheckOutlined} from "@material-ui/icons";
+import {Box, IconButton, Typography} from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
+import {makeStyles} from "@mui/styles";
 
 interface EditableFieldProps {
     label: string,
@@ -43,7 +44,7 @@ const EditableField = ({label, value, editableComponent}: EditableFieldProps) =>
                  <div className={styles.inlineItems}>
                     {editableComponent}
                     <IconButton onClick={handleEditClose}>
-                        <CheckOutlined/>
+                        <CheckOutlinedIcon/>
                     </IconButton>
                 </div> :
                 <div className={styles.inlineItems}>

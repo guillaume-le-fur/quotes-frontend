@@ -1,37 +1,38 @@
 import React, {useState} from "react";
 import {
+    Avatar,
     Box,
     Button,
     Card,
     CardActions,
     CardContent,
+    CardHeader,
     Chip,
-    Dialog, DialogActions, DialogContent, DialogContentText,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
     DialogTitle,
-    makeStyles,
+    IconButton,
     Typography
-} from "@material-ui/core";
+} from "@mui/material";
 import Quote from "../types/quote";
-import TextFieldsOutlinedIcon from '@material-ui/icons/TextFieldsOutlined';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
-import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
-import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
-
-import {SpeedDial, SpeedDialAction, SpeedDialIcon} from "@material-ui/lab";
+import TextFieldsOutlinedIcon from '@mui/icons-material/TextFieldsOutlined';
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
+import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import { RouteComponentProps, withRouter } from 'react-router';
 import useWindowDimensions from "../hooks/useWindowDimensions";
-import {MOBILE_WIDTH} from "../constants";
+import {LIGHT_BLUE1, MOBILE_WIDTH} from "../constants";
+import QuoteInfoBoxActions from "./QuoteInfoBoxActions";
+import {makeStyles} from "@mui/styles";
+import {authenticationService} from "../services/authentication.service";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     header: {
-        display: 'flex',
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        flexWrap: "wrap"
+        backgroundColor: LIGHT_BLUE1
     },
-
     root: {
         minWidth: 275,
     },
@@ -48,21 +49,25 @@ const useStyles = makeStyles((theme) => ({
     },
     chips: {
         marginRight: 4,
-        marginTop: 10
+        marginTop: 10,
+        backgroundColor: LIGHT_BLUE1
     },
     chipsPlaceholder :{
         marginRight: 4,
         marginTop: 10,
         padding: "12px 0"
-    },
-    actionButton: {
-        margin: theme.spacing(1),
     }
 }));
 
 interface QuoteInfoBoxProps {
     quote: Quote,
-    onQuoteDelete: Function
+    onQuoteDelete: Function,
+}
+
+export interface speedDialElementProps {
+    icon: any,
+    name: string,
+    onClick: any
 }
 
 const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & RouteComponentProps) => {
@@ -71,7 +76,6 @@ const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & Route
     const width = useWindowDimensions().width;
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [speedDialOpen, setSpeedDialOpen] = useState(false);
 
     const copyText = () => navigator.clipboard.writeText(quote.text)
     const copyCitationInfo = () => navigator.clipboard.writeText([quote.author, quote.book].join(", "));
@@ -79,29 +83,47 @@ const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & Route
     const handleCloseDeleteDialog = () => setDeleteDialogOpen(false);
     const handleOpenDeleteDialog = () => setDeleteDialogOpen(true);
 
-    const handleSpeedDialOpen = () => setSpeedDialOpen(true);
-    const handleSpeedDialClose = () => setSpeedDialOpen(false);
-
     const goToEdit = () => {
         if(quote.id !== undefined) {
             history.push('/edit/'.concat(quote.id.toString()))
         }
     }
 
-    const speedDialElements = [
+    let speedDialElements = Array<speedDialElementProps>();
+    speedDialElements.push(
         { icon: <TextFieldsOutlinedIcon />, name: 'Copy text', onClick: copyText},
-        { icon: <FileCopyOutlinedIcon />, name: 'Copy citing info', onClick: copyCitationInfo},
-        { icon: <EditOutlinedIcon />, name: 'Edit', onClick: goToEdit},
-        { icon: <DeleteOutlined />, name: 'Delete', onClick: handleOpenDeleteDialog},
-    ]
+        { icon: <FileCopyOutlinedIcon />, name: 'Copy citing info', onClick: copyCitationInfo}
+    )
+
+    if(quote.creatorId === authenticationService.currentUserValue.id || authenticationService.currentUserValue.is_admin){
+        speedDialElements.push(
+            { icon: <EditOutlinedIcon />, name: 'Edit', onClick: goToEdit},
+            { icon: <DeleteOutlined />, name: 'Delete', onClick: handleOpenDeleteDialog}
+        )
+    }
 
     return (
-        <Card style={{margin: width < MOBILE_WIDTH ? "0 5px" : "0"}}>
+        <Card style={{margin: width < MOBILE_WIDTH ? "0 5px" : "5px"}}>
+            <CardHeader
+                avatar={<Avatar aria-label={"avatar-" + quote.creatorId}>{quote.creatorId}</Avatar>}
+                action={<QuoteInfoBoxActions actions={speedDialElements}/>}
+                title={
+                    <div>
+                        {quote.creatorId.toString().charAt(0)}
+                        <IconButton style={{width: "20px", height: "20px", margin:"3px"}}>
+                            <PersonAddOutlinedIcon style={{width: "20px"}} />
+                        </IconButton>
+                    </div>
+                }
+                subheader={quote.book}
+                className={classes.header}
+            />
+
             <CardContent>
                 <Box className={classes.title} fontStyle="italic" color="textSecondary">
                     {quote.text}
                 </Box>
-                <Typography color="textSecondary">
+                <Typography style={{"textAlign": "right"}} color="textSecondary">
                     {quote.author}
                 </Typography>
                 <Typography className={classes.pos} variant="body2" component="p">
@@ -112,26 +134,7 @@ const QuoteInfoBox = ({quote, onQuoteDelete, history}: QuoteInfoBoxProps & Route
                 }
             </CardContent>
             <CardActions>
-                <div className={classes.header}>
-                    <SpeedDial
-                        ariaLabel={"actions"}
-                        open={speedDialOpen}
-                        onOpen={handleSpeedDialOpen}
-                        icon={<SpeedDialIcon openIcon={<MoreHorizOutlinedIcon />} icon={<MoreVertOutlinedIcon/>}/>}
-                        onClose={handleSpeedDialClose}
-                        direction="right"
-                        FabProps={{size: "small"}}
-                    >
-                        {speedDialElements.map(element => (
-                            <SpeedDialAction
-                                key={element.name}
-                                icon={element.icon}
-                                onClick={element.onClick}
-                                tooltipTitle={element.name}
-                            />
-                        ))}
-                    </SpeedDial>
-                </div>
+
             </CardActions>
             <Dialog
                 open={deleteDialogOpen}

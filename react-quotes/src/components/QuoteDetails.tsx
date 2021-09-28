@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import useQuoteDetailService from "../hooks/useQuoteDetailSevice";
-import {Button, Grid} from "@material-ui/core";
+import {Button, Grid} from "@mui/material";
 
 interface RouteParams {
     id: string

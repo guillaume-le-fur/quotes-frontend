@@ -34,7 +34,7 @@ const FilterableQuoteTable = () => {
                 filterText={filterText}
                 onChange={filterText => {setFilterText(filterText); textChange.next(filterText)}}
             />
-            <QuoteTable filterText={filterText}/>
+            <QuoteTable filterText={filterText} creatorId={''}/>
         </ContainerDiv>
     )
 }

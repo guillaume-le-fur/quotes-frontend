@@ -5,17 +5,17 @@ import {
     CardContent,
     Chip,
     IconButton,
-    makeStyles,
     Snackbar,
     TextField,
-    Typography
-} from "@material-ui/core";
+    Typography,
+    Alert
+} from "@mui/material";
 import useWindowDimensions from "../hooks/useWindowDimensions";
-import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
-import MuiAlert from "@material-ui/lab/Alert";
-import SaveIcon from "@material-ui/icons/Save";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { RouteComponentProps, withRouter } from 'react-router';
 import {MOBILE_WIDTH} from "../constants";
+import {makeStyles} from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
     form: {
@@ -43,7 +43,11 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-const AddQuote = ({history}: RouteComponentProps) => {
+interface AddQuoteProps {
+    creatorId: string
+}
+
+const AddQuote = ({history, creatorId}: RouteComponentProps & AddQuoteProps) => {
     const width = useWindowDimensions().width;
     const styles = useStyles();
 
@@ -71,7 +75,8 @@ const AddQuote = ({history}: RouteComponentProps) => {
                 text: currentText,
                 author: currentAuthor,
                 book: currentBook,
-                tags: currentTags
+                tags: currentTags,
+                creatorId: creatorId
             })
         };
         await fetch('/quote/0', requestOptions)
@@ -120,7 +125,7 @@ const AddQuote = ({history}: RouteComponentProps) => {
                     <Typography variant={"body1"} className={styles.fieldTitle}>Text</Typography>
                     <TextField
                         multiline
-                        rowsMax={4}
+                        maxRows={4}
                         id="quote-edit-text"
                         value={currentText}
                         onChange={(event) => handleChange(event, setCurrentText)}
@@ -152,13 +157,13 @@ const AddQuote = ({history}: RouteComponentProps) => {
                                 onChange={e => setCurrentNewTag(e.target.value)}
                             />
                             <IconButton aria-label="add" size="small" onClick={handleAddIcon}>
-                                <AddCircleRoundedIcon fontSize="default"/>
+                                <AddCircleRoundedIcon fontSize="small"/>
                             </IconButton>
                         </div>
                         <Snackbar open={snackBarOpen} autoHideDuration={3000} onClose={handleCloseSnackBar}>
-                            <MuiAlert elevation={6} variant="filled" severity={"error"} onClose={handleCloseSnackBar}>
+                            <Alert elevation={6} variant="filled" severity={"error"} onClose={handleCloseSnackBar}>
                                 {snackBarText}
-                            </MuiAlert>
+                            </Alert>
                         </Snackbar>
                     </div>
                 </form>
@@ -167,7 +172,7 @@ const AddQuote = ({history}: RouteComponentProps) => {
                 <Button
                     color="primary"
                     size="small"
-                    startIcon={<SaveIcon />}
+                    startIcon={<SaveOutlinedIcon />}
                     onClick={submitEdit}
                 >
                     Submit

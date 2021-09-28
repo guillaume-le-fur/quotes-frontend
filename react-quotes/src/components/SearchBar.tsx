@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import {Grid, TextField} from "@material-ui/core";
-import SearchIcon from '@material-ui/icons/Search';
+import {Grid, TextField} from "@mui/material";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 export interface searchBarProps {
     onChange: (text: string) => void;
@@ -16,7 +16,7 @@ const SearchBar = ({filterText, onChange}: searchBarProps) => (
     <SearchForm>
         <Grid container spacing={1} alignItems="flex-end">
           <Grid item>
-            <SearchIcon />
+            <SearchOutlinedIcon />
           </Grid>
           <Grid item>
             <TextField
