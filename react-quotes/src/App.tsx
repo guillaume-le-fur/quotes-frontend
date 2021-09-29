@@ -24,6 +24,7 @@ export const axiosInstance = axios.create({
 // axiosInstance.defaults.headers.post['Content-Type'] = 'application/json'
 axiosInstance.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 
+
 function App() {
     const [currentUser, setCurrentUser] = useState(undefined);
 

@@ -1,6 +1,6 @@
 import {
     AppBar,
-    Fab,
+    Fab, Theme,
     Toolbar,
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -11,37 +11,36 @@ import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import FooterElement from "./FooterElement";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import {Link} from "react-router-dom";
-import {DARK_BLUE1, LIGHT_BLUE1, MOBILE_WIDTH} from "../constants";
-import {createStyles, makeStyles} from "@mui/styles";
+import {MOBILE_WIDTH} from "../constants";
+import {makeStyles} from "@mui/styles";
 
 const FooterLinks = [
     {
         label: "Home",
         href: "/",
-        icon: <HomeOutlinedIcon/>
+        icon: <HomeOutlinedIcon color="secondary"/>
     },
     {
         label: "My quotes ",
         href: "/myQuotes",
-        icon: <MoreHorizOutlinedIcon/>
+        icon: <MoreHorizOutlinedIcon color="secondary"/>
     },
     {
         label: "About",
         href: "/about",
-        icon: <SearchOutlinedIcon/>
+        icon: <SearchOutlinedIcon color="secondary"/>
     },
     {
         label: "Account (redirects home)",
         href: "/account",
-        icon: <PersonOutlinedIcon/>
+        icon: <PersonOutlinedIcon color="secondary"/>
     }
 ];
 
-const useStyles = makeStyles((theme) => createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     appBar: {
         top: 'auto!important',
         bottom: 0,
-        backgroundColor: LIGHT_BLUE1,
     },
     grow: {
         flexGrow: 1,
@@ -52,7 +51,7 @@ const useStyles = makeStyles((theme) => createStyles({
         left: '0!important' as any,
         right: '0!important' as any,
         margin: '0 auto!important' as any,
-        backgroundColor: `${DARK_BLUE1}!important` as any
+        backgroundColor: theme.palette.primary.contrastText + '!important'
     },
     spacedIcons: {
         display: 'flex',
@@ -66,29 +65,30 @@ const Footer = ({currentUser}: any) => {
 
     return (
         <div>
-        {currentUser && (
-            <div>
-                <Toolbar/>
-                <Toolbar/>
-                <AppBar position="fixed" color="primary" className={styles.appBar}>
-                <Toolbar className={styles.spacedIcons}>
-            {FooterLinks.map(element => (
-                <FooterElement key={element.label} icon={element.icon} label={element.label} href={element.href}/>
-                ))}
-                <Fab size={width < MOBILE_WIDTH ? "small" : "medium"}
-                style={{top : width < MOBILE_WIDTH ? -25 : -30}}
-                component={Link}
-                to={'/add'}
-                color="secondary"
-                aria-label="add"
-                className={styles.fabButton}
-                >
-                <AddIcon />
-                </Fab>
-                </Toolbar>
-                </AppBar>
-            </div>
-        )}
+            {currentUser && (
+                <div>
+                    <Toolbar/>
+                    <Toolbar/>
+                    <AppBar position="fixed" color="primary" className={styles.appBar}>
+                        <Toolbar className={styles.spacedIcons}>
+                            {FooterLinks.map(element => (
+                                <FooterElement key={element.label} icon={element.icon} label={element.label}
+                                               href={element.href}/>
+                            ))}
+                            <Fab size={width < MOBILE_WIDTH ? "small" : "medium"}
+                                 style={{top: width < MOBILE_WIDTH ? -25 : -30}}
+                                 component={Link}
+                                 to={'/add'}
+                                 color="secondary"
+                                 aria-label="add"
+                                 className={styles.fabButton}
+                            >
+                                <AddIcon/>
+                            </Fab>
+                        </Toolbar>
+                    </AppBar>
+                </div>
+            )}
         </div>
     )
 

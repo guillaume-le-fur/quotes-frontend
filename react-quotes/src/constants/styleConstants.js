@@ -1,4 +1,22 @@
 
 export const MOBILE_WIDTH = 750;
 export const LIGHT_BLUE1 = '#abcfff'
-export const DARK_BLUE1 = "#2b86ff"
+export const DARK_BLUE1 = '#003E5C'
+export const GOLD1 = '#A68B4E'
+export const WARM_GREY_7C = '#8E8581'
+export const WARM_GREY_1C = '#ECE8DC'
+export const LIGHT_BLUE_GREY = '#D4E8EF'
+export const LIGHT_BLUE_DARK_GREY = '#98B8B4'
+export const LAGOON_BLUE = '#6DCCBB'
+export const WARN_ORANGE = '#F2CC38'
+export const ERROR_RED = '#A92021'
+export const INFO_BLUE ='#006880'
+export const SUCCESS_GREEN = '#6B7E51'
+export const COOL_GREY_11C = '#424242'
+export const COOL_GREY_10C = '#636363'
+export const COOL_GREY_8C = '#9B9B9B'
+export const VIOLET = '#4D1654'
+export const LILAS = '#87788B'
+export const LIGHT_GREEN = '#ACB326'
+
+export const GOLD1_05 = 'rgba(166,139,78,0.5)'

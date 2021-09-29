@@ -1,20 +1,28 @@
 import React from 'react';
-import styled from "styled-components";
 import FilterableQuoteTable from "./FilterableQuoteTable";
-
-const TitleDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
+import {makeStyles} from "@mui/styles";
+import {Theme} from "@mui/material";
 
 
-const Home = () => (
-    <TitleDiv>
-        <h1>Welcome to Quotes !</h1>
-        <FilterableQuoteTable />
 
-    </TitleDiv>
-)
+const useStyles = makeStyles((theme: Theme) => ({
+    titleDiv: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    }
+}))
+
+
+const Home = () => {
+    const styles = useStyles();
+
+    return (
+        <div className={styles.titleDiv}>
+            <h1>Welcome to Quotes !</h1>
+            <FilterableQuoteTable />
+        </div>
+    )
+}
 
 export default Home;

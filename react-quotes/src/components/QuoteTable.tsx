@@ -1,17 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import useQuoteService from "../hooks/useQuoteService";
-import {Grid} from "@mui/material";
+import {CircularProgress, Grid} from "@mui/material";
 import QuoteInfoBox from "./QuoteInfoBox";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import Quote from "../types/quote";
 import {MOBILE_WIDTH} from "../constants";
+import {makeStyles} from "@mui/styles";
 
 export interface QuoteTableProps {
     filterText: string,
     creatorId: string
 }
 
+const useStyles = makeStyles(() => ({
+    loadingDiv: {
+        display: "flex",
+        justifyContent: "center"
+    },
+    containerDiv: {
+        width: '100%',
+    }
+}));
+
 const QuoteTable = ({filterText, creatorId}: QuoteTableProps) => {
+    const styles = useStyles();
     const [quotes, setQuotes] = useState<Quote[]>([]);
 
     const service = useQuoteService(filterText);
@@ -53,8 +65,10 @@ const QuoteTable = ({filterText, creatorId}: QuoteTableProps) => {
     }
 
     return (
-        <div style={{width: '100%'}}>
-            {service.status === 'loading' && <div>Loading...</div>}
+        <div className={styles.containerDiv}>
+            {service.status === 'loading' &&
+                <div className={styles.loadingDiv}><CircularProgress color="secondary"/></div>
+            }
             {service.status === 'loaded' &&
                 <div>
                     <Grid container spacing={1}>

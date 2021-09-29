@@ -12,16 +12,11 @@ const useQuoteService = (filterText: string) => {
     const [rows, setRows] = useState<Service<Quote[]>>({status: 'loading'})
 
     useEffect(() => {
-        const queryUrl = filterText !== undefined && filterText.length > 0 ? '/quotes/' + filterText :  '/quotes'
-        const headers = authHeader()
+        const queryUrl = filterText && filterText.length > 0 ? '/quotes/' + filterText :  '/quotes'
         setRows({status: 'loading'})
-        axios.get(queryUrl, {headers: headers})
-            .then((response) => {
-                setRows({status: 'loaded', payload: response.data.quotes})
-            })
-            .catch((error) => {
-                setRows({status: 'error', error: error})
-            })
+        axios.get(queryUrl, {headers: authHeader()})
+            .then((response) => setRows({status: 'loaded', payload: response.data.quotes}))
+            .catch((error) => setRows({status: 'error', error: error}))
     }, [filterText])
     return(rows);
 };

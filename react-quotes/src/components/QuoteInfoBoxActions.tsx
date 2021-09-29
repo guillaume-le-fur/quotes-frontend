@@ -26,10 +26,10 @@ const QuoteInfoBoxActions = ({actions}: QuoteInfoBoxActionsProps) => {
     };
 
     return(
-        <div >
+        <div>
             {width <= MOBILE_WIDTH ?
                 <div>
-                    <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                    <IconButton aria-controls="simple-menu" aria-haspopup="true" color="secondary" onClick={handleClick}>
                         <MoreVertOutlinedIcon/>
                     </IconButton>
                     <Menu
@@ -49,7 +49,7 @@ const QuoteInfoBoxActions = ({actions}: QuoteInfoBoxActionsProps) => {
                     ariaLabel={"actions"}
                     open={speedDialOpen}
                     onOpen={handleSpeedDialOpen}
-                    icon={<SpeedDialIcon openIcon={<MoreHorizOutlinedIcon/>} icon={<MoreVertOutlinedIcon/>}/>}
+                    icon={<SpeedDialIcon openIcon={<MoreHorizOutlinedIcon color="secondary"/>} icon={<MoreVertOutlinedIcon color="secondary"/>}/>}
                     onClose={handleSpeedDialClose}
                     direction="left"
                     FabProps={{

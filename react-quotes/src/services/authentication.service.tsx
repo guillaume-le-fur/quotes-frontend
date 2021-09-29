@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import {axiosInstance} from "../App";
 
 
-const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')!));
+const currentUserSubject = new BehaviorSubject(JSON.parse(sessionStorage.getItem('currentUser')!));
 
 const btoa = (str: string) => Buffer.from(str, 'utf-8').toString('base64');
 const getBasicAuth = (username: string, password: string) => 'Basic '+ btoa(`${username}:${password}`)
@@ -29,15 +29,15 @@ function register(username: string, password: string, email: string) {
         password: password
     })
     .then((response) => {
-        console.log('Registered user' + response.data);
-        localStorage.setItem('currentUser', JSON.stringify(response.data.accessToken));
+        console.log('Registered user' + JSON.stringify(response.data));
+        sessionStorage.setItem('currentUser', JSON.stringify(response.data));
         currentUserSubject.next(response.data);
         return undefined;
     })
     .catch((error) => {
         if (error.response){
             if (error.response.status === 409){
-                return `User ${username} already exists`
+                return `User ${username} already exists`;
             }
         }
     })
@@ -52,7 +52,7 @@ function login(username: string, password: string) {
     })
     .then((response) => {
         console.log('User logged in : ' + JSON.stringify(response.data));
-        localStorage.setItem('currentUser', JSON.stringify(response.data));
+        sessionStorage.setItem('currentUser', JSON.stringify(response.data));
         currentUserSubject.next(response.data);
         return undefined;
     })
@@ -66,7 +66,6 @@ function login(username: string, password: string) {
 }
 
 function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
     currentUserSubject.next(null);
 }

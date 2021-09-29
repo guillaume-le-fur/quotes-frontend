@@ -16,6 +16,7 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { RouteComponentProps, withRouter } from 'react-router';
 import {MOBILE_WIDTH} from "../constants";
 import {makeStyles} from "@mui/styles";
+import {authenticationService} from "../services/authentication.service";
 
 const useStyles = makeStyles(() => ({
     form: {
@@ -43,11 +44,7 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-interface AddQuoteProps {
-    creatorId: string
-}
-
-const AddQuote = ({history, creatorId}: RouteComponentProps & AddQuoteProps) => {
+const AddQuote = ({history}: RouteComponentProps) => {
     const width = useWindowDimensions().width;
     const styles = useStyles();
 
@@ -68,6 +65,7 @@ const AddQuote = ({history, creatorId}: RouteComponentProps & AddQuoteProps) => 
     }
 
     async function submitEdit() {
+        console.log(`Current user ID : ${authenticationService.currentUserValue.id}`)
         const requestOptions = {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
@@ -76,7 +74,7 @@ const AddQuote = ({history, creatorId}: RouteComponentProps & AddQuoteProps) => 
                 author: currentAuthor,
                 book: currentBook,
                 tags: currentTags,
-                creatorId: creatorId
+                creator_id: authenticationService.currentUserValue.id
             })
         };
         await fetch('/quote/0', requestOptions)
